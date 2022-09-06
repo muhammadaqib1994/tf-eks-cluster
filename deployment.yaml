@@ -1,56 +1,62 @@
 ---
-apiVersion: v1
-kind: Service
-metadata:
-  name: springboot-app	
-
-
-spec:
-  type: LoadBalancer
-  ports:
-  - port: 80
-    targetPort: 8080
-  selector:
-    app: springboot-app	
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: springboot-app	
+  labels:
+    app.kubernetes.io/name: springboot
+    app.kubernetes.io/instance: springboot
+    app.kubernetes.io/version: '1.0.0'
+    app.kubernetes.io/managed-by: springboot
+  name: spring-boot
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: springboot-app	
+      app: spring-boot
   template:
     metadata:
       labels:
-        app: springboot-app	
+        app: spring-boot
     spec:
       containers:
-      - name: springboot-app	
-        image: 273725063969.dkr.ecr.us-west-2.amazonaws.com/springboot-app:latest
-        ports:
-        - containerPort: 8080
-        env:
-        - name: MESSAGE
-          value: Hello Kubernetes!
+        - image: 273725063969.dkr.ecr.us-west-2.amazonaws.com/springboot-app:latest
+          imagePullPolicy: Always
+          name: spring-boot
+          ports:
+            - containerPort: 8080
 ---
-apiVersion: extensions/v1beta1
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: springboot
+    app.kubernetes.io/instance: springboot-instance
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/managed-by: springboot
+  name: springboot
+spec:
+  selector:
+    app: sprinboot
+  type: LoadBalancer
+  ports:
+   -  protocol: TCP
+      port: 80
+      targetPort: 8080
+
+---
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: hello-ingress
-  annotations:
-    kubernetes.io/ingress.class: "alb"
-    alb.ingress.kubernetes.io/healthcheck-path: "/"
-    alb.ingress.kubernetes.io/success-codes: "200,404"
-    alb.ingress.kubernetes.io/scheme: "internet-facing"
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
-spec:
+  name: spring-ingress
+spec:  
   rules:
   - http:
       paths:
       - path: /
+        pathType: Prefix
         backend:
-          serviceName: springboot-app	
-          servicePort: 80
+          service:
+            name: spring-boot
+            port:
+              number: 8080
