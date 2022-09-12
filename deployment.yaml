@@ -7,23 +7,23 @@ metadata:
     app.kubernetes.io/instance: springboot
     app.kubernetes.io/version: '1.0.0'
     app.kubernetes.io/managed-by: springboot
-  name: spring-boot
+  name: springboot
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: spring-boot
+      app: springboot
   template:
     metadata:
       labels:
-        app: spring-boot
+        app: springboot
     spec:
       containers:
         - image: 273725063969.dkr.ecr.us-west-2.amazonaws.com/springboot-app:latest
           imagePullPolicy: Always
-          name: spring-boot
+          name: springboot
           ports:
-            - containerPort: 8080
+            - containerPort: 8089
 ---
 apiVersion: v1
 kind: Service
@@ -34,15 +34,15 @@ metadata:
     app.kubernetes.io/version: "1.0.0"
     app.kubernetes.io/component: backend
     app.kubernetes.io/managed-by: springboot
-  name: spring-boot
+  name: springboot
 spec:
   selector:
-    app: sprin-boot
+    app: springboot
   type: LoadBalancer
   ports:
    -  protocol: TCP
       port: 80
-      targetPort: 8080
+      targetPort: 8089
 
 ---
 apiVersion: networking.k8s.io/v1
@@ -57,6 +57,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: spring-boot
+            name: springboot
             port:
-              number: 8080
+              number: 8089
