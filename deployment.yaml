@@ -34,10 +34,10 @@ metadata:
     app.kubernetes.io/version: "1.0.0"
     app.kubernetes.io/component: backend
     app.kubernetes.io/managed-by: springboot
-  name: springboot
+  name: spring-boot
 spec:
   selector:
-    app: sprinboot
+    app: sprin-boot
   type: LoadBalancer
   ports:
    -  protocol: TCP
