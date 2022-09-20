@@ -1,9 +1,9 @@
 variable "eks-cluster-name" {
-  type = string
+  type = map(string)
   default = "book-cluster"
  }
  
  variable "eks-cluster-version" {
-  type = string
+  type = map(string)
   default = "1.20"
  }
