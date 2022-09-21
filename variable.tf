@@ -1,9 +1,9 @@
-variable "eks-cluster-name" {
+variable "eks_cluster_name" {
   type = string
   default = "book-cluster"
  }
  
- variable "eks-cluster-version" {
+ variable "eks_cluster_version" {
   type = string
   default = "1.20"
  }
