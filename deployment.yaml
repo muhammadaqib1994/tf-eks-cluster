@@ -48,7 +48,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: spring-ingress
+  name: minimal-ingress
 spec:  
   rules:
   - http:
